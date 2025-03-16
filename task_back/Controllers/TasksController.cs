@@ -63,12 +63,20 @@ namespace task_back.Controllers
         public async Task<IActionResult> DeleteTask(int id)
         {
             var task = await _context.Tasks.FindAsync(id);
-            if (task == null) return NotFound();
+
+            if (task == null)
+                return NotFound();
+
+            if (!task.IsCompleted)
+            {
+                return BadRequest(new { message = "No se puede eliminar una tarea que aún está pendiente." });
+            }
 
             _context.Tasks.Remove(task);
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
 
         [HttpPut("status/{id}")]
         public async Task<IActionResult> UpdateTaskStatus(int id, UpdateTaskStatusRequest request)
