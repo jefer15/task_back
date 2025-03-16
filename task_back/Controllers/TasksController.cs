@@ -43,6 +43,12 @@ namespace task_back.Controllers
         [HttpPost]
         public async Task<ActionResult<TaskItem>> CreateTask(TaskItem task)
         {
+            var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Title == task.Title);
+            if (existingTask != null)
+            {
+                return Conflict(new { message = "Ya existe una tarea con este título." });
+            }
+
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetTasks), new { id = task.Id }, task);
@@ -53,6 +59,12 @@ namespace task_back.Controllers
         {
             if (id != task.Id)
                 return BadRequest();
+
+            var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Title == task.Title && t.Id != id);
+            if (existingTask != null)
+            {
+                return Conflict(new { message = "Ya existe otra tarea con este título." });
+            }
 
             _context.Entry(task).State = EntityState.Modified;
             await _context.SaveChangesAsync();
