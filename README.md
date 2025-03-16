@@ -8,7 +8,7 @@ This is a simple **Task Management API** built with **.NET 8** and **ASP.NET Cor
 Ensure you have the following installed:
 - **.NET 8 SDK** 
 
-### 🛠 Installation & Running Locally
+### Installation & Running Locally
 1. **Clone the repository** (Ensure you are on the `develop` branch):
    ```sh
    git clone -b develop https://github.com/jefer15/task_back.git
